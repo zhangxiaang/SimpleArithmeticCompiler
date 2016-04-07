@@ -4,8 +4,11 @@
 public class Compiler {
     public static void main(String[] args) {
         Lexer lexer = new Lexer();
-        BasicParser parser = new BasicParser(lexer);
-        parser.stms();
 //        lexer.testLexer();
+        BasicParser parser = new BasicParser(lexer);
+        CommonParser parser1 = new CommonParser(lexer);
+        parser1.stms();
+//        parser.stms();
+
     }
 }

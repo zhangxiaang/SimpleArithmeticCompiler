@@ -79,7 +79,7 @@ public class Lexer {
 
         while (true) {
             while (current == "") {
-                Scanner scanner = new Scanner(System.in);//等待输入
+                Scanner scanner = new Scanner(System.in);
                 while (true) {
                     String line = scanner.nextLine();
                     if (line.equals("end")) { //end 作为输入结束的标志
@@ -88,12 +88,15 @@ public class Lexer {
                     input_buffer += line;
                 }
                 scanner.close();
-                if (input_buffer.length() == 0) { // 表示什么都没输入
+                if (input_buffer.length() == 0) {
                     current = "";
                     return EOF;
                 }
                 current = input_buffer;
                 current.trim();
+            }
+            if (current.isEmpty()) {
+                return EOF;
             }
             for (int i = 0; i < current.length(); i++) {
                 char c = current.charAt(i);
@@ -131,7 +134,7 @@ public class Lexer {
                             System.out.println("输入的字符有误" + c);
                         } else {
                             //需要判断连续输入的string是否是一个int
-                            while (isNumOrAlphabit(current.charAt(i))) {
+                            while (i < current.length() && isNumOrAlphabit(current.charAt(i))) {
                                 i++;
                                 tempLen++;
                             }
@@ -141,7 +144,6 @@ public class Lexer {
                         }
                         break;
                 }
-
             }
         }
     }

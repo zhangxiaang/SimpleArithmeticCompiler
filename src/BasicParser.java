@@ -19,7 +19,7 @@ public class BasicParser {
             lexer.next();
         } else {
             isLegalStm = false;
-            System.out.println(" Missing semicolon");
+            System.out.println("Missing semicolon");
             return;
         }
 
@@ -27,6 +27,7 @@ public class BasicParser {
             //分号后还有statements
             stms();
         }
+
         if (isLegalStm) {
             System.out.println("the statements is legal");
         }
@@ -38,15 +39,14 @@ public class BasicParser {
     }
 
     private void exp_prime() {
-        if (lexer.match(Lexer.PLUS)) {
+        if (lexer.match(Lexer.PLUS) || lexer.match(Lexer.DECRESS)) {
             lexer.next();
             term();
             exp_prime();
         } else if (lexer.match(Lexer.UNKNOWN)) {
             isLegalStm = false;
-            System.out.println("unknown symbol:" + lexer.tempText);
-            return;
-        } else return; // 为 null
+            System.out.println("Unknown symbol:" + lexer.tempText);
+        }
     }
 
     private void term() {
@@ -55,11 +55,11 @@ public class BasicParser {
     }
 
     private void term_prime() {
-        if (lexer.match(Lexer.TIMES)) {
+        if (lexer.match(Lexer.TIMES) || lexer.match(Lexer.DEVIDE)) {
             lexer.next();
             factor();
             term_prime();
-        } else return;
+        }
     }
 
     private void factor() {
@@ -72,13 +72,11 @@ public class BasicParser {
                 lexer.next();
             } else {
                 isLegalStm = false;
-                System.out.println("missing )");
-                return;
+                System.out.println("Missing )");
             }
         } else {
             isLegalStm = false;
             System.out.println("illegal statements");
-            return;
         }
     }
 }
