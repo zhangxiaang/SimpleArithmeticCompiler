@@ -3,6 +3,7 @@
  */
 public class CommonParser {
     private Lexer lexer;
+    //模拟寄存器
     String[] backupNames = {"t0", "t1", "t2", "t3", "t4", "t5", "t6",
             "t7", "t8", "t9", "t10", "t11", "t12", "t13", "t14", "t15"};
     private int nameP = 0;
@@ -16,14 +17,14 @@ public class CommonParser {
             System.out.println("Expression too complex...");
             System.exit(1);
         }
-        String reg = backupNames[nameP];
+        String name = backupNames[nameP];
         nameP++;
-        return reg;
+        return name;
     }
 
     private void freeNames(String name) {
         if (nameP > 0) {
-            backupNames[nameP] = name;
+            backupNames[nameP] = name;//name这个寄存器仍可复用,所以此时只需要往后拨一位保证下次用到的寄存器是这个name
             nameP--;
         } else
             System.out.println("Internal error");
@@ -35,12 +36,12 @@ public class CommonParser {
 
         while (lexer.match(Lexer.EOF)) {
             expt(tempName);
-//            freeNames(tempName);
+            freeNames(tempName);
 
             if (lexer.match(Lexer.SEMI)) {
                 lexer.next();
             } else
-                System.out.println("Inserting missing semicolon");
+                System.out.println("Inserting missing ';'");
         }
     }
 
@@ -52,14 +53,14 @@ public class CommonParser {
             tempName2 = allocName();
             term(tempName2);
             System.out.println(tempName + " += " + tempName2);
-//            freeNames(tempName2);
+            freeNames(tempName2);
         }
         while (lexer.match(Lexer.DECRESS)) {
             lexer.next();
             tempName2 = allocName();
             term(tempName2);
             System.out.println(tempName + " -= " + tempName2);
-//            freeNames(tempName2);
+            freeNames(tempName2);
         }
     }
 
@@ -71,14 +72,14 @@ public class CommonParser {
             tempName2 = allocName();
             factor(tempName2);
             System.out.println(tempName + " *= " + tempName2);
-//            freeNames(tempName2);
+            freeNames(tempName2);
         }
         while (lexer.match(Lexer.DEVIDE)) {
             lexer.next();
             tempName2 = allocName();
             factor(tempName2);
             System.out.println(tempName + " /= " + tempName2);
-//            freeNames(tempName2);
+            freeNames(tempName2);
         }
     }
 
