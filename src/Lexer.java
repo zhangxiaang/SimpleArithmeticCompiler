@@ -2,6 +2,7 @@ import java.util.Scanner;
 
 /**
  * Created by zhangxiaang on 16/4/6.
+ * 定义词法规则
  */
 public class Lexer {
     public static final int EOF = 0;//end of file
@@ -16,16 +17,16 @@ public class Lexer {
 
 
     private int lookAhead = -1;//当前指针
-    private String current = "";//current 表示当前的terminal内的输入内容
-    private String input_buffer = "";//缓存terminal输入的内容
-    public String text = "";
-    private int yylength = 0;
+    private String current = "";
+    private String input_buffer = "";
+    public String tempText = "";
+    private int tempLen = 0;
 
     //entry of this file
     public void runLexer() {
         while (!match(EOF)) {
-            System.out.println("Token: " + token() + " Symbol:" + text);
-            advance();
+            System.out.println("Token: " + token() + " Symbol:" + tempText);
+            next();
         }
     }
 
@@ -63,7 +64,7 @@ public class Lexer {
         return token;
     }
 
-    private void advance() {
+    private void next() {
         lookAhead = lex();//向前推进?
     }
 
@@ -94,15 +95,14 @@ public class Lexer {
                 current = input_buffer;
                 current.trim();
             }
-            //开始遍历处理 terminal 内输入的内容 每一个字符
             for (int i = 0; i < current.length(); i++) {
                 char c = current.charAt(i);
-                text = current.substring(0, 1);
-                yylength = 0; //每次进来都应该初始化一下
+                tempText = current.substring(0, 1);
+                tempLen = 0; //每次进来都应该初始化一下
                 switch (c) {
                     case ';':
                         current = current.substring(1);
-                        return SEMI; // 此处是直接跳出while(true)循环结束函数栈的
+                        return SEMI;
                     case '+':
                         current = current.substring(1);
                         return PLUS;
@@ -133,10 +133,10 @@ public class Lexer {
                             //需要判断连续输入的string是否是一个int
                             while (isNumOrAlphabit(current.charAt(i))) {
                                 i++;
-                                yylength++;
+                                tempLen++;
                             }
-                            text = current.substring(0, yylength);
-                            current = current.substring(yylength);
+                            tempText = current.substring(0, tempLen);
+                            current = current.substring(tempLen);
                             return NUM_OR_ID;
                         }
                         break;
