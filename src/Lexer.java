@@ -13,8 +13,8 @@ public class Lexer {
     public static final int DECRESS = 8;// -
     public static final int LP = 4;
     public static final int RP = 5;
-    public static final int NUM_OR_ID = 6;//digit or Alphabit
-
+    public static final int NUM_OR_ID = 6;//可以考虑使用正则表达式来匹配
+    public static final int UNKNOWN = 9;
 
     private int lookAhead = -1;//当前指针
     private String current = "";
@@ -23,7 +23,7 @@ public class Lexer {
     private int tempLen = 0;
 
     //entry of this file
-    public void runLexer() {
+    public void testLexer() {
         while (!match(EOF)) {
             System.out.println("Token: " + token() + " Symbol:" + tempText);
             next();
@@ -64,11 +64,11 @@ public class Lexer {
         return token;
     }
 
-    private void next() {
+    public void next() {
         lookAhead = lex();//向前推进?
     }
 
-    private boolean match(int token) {
+    public boolean match(int token) {
         if (lookAhead == -1) {
             lookAhead = lex();
         }
